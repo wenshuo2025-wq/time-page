@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ws</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        body {
+            background-color: #eef2f9;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .link-card {
+            background-color: #e5ebf7;
+            border-radius: 16px;
+            padding: 24px 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .link-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+        }
+        .link-name {
+            font-size: 28px;
+            font-weight: 500;
+            color: #222;
+        }
+        .link-category {
+            font-size: 18px;
+            color: #666;
+        }
+        /* 模态框样式 */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        .modal-content {
+            background-color: #e5ebf7;
+            border-radius: 16px;
+            padding: 24px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+        .modal-title {
+            font-size: 28px;
+            font-weight: 500;
+            color: #222;
+            margin-bottom: 16px;
+        }
+        .modal-desc {
+            font-size: 16px;
+            color: #888;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #d0d8e8;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+        }
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .modal-btn.like {
+            background-color: #e5ebf7;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .modal-btn.visit {
+            background-color: #e5ebf7;
+            color: #222;
+            font-weight: 500;
+        }
+        .modal-btn:hover {
+            background-color: #dce4f2;
+        }
+    </style>
+</head>
+<body>
+    <div id="linkContainer"></div>
+
+    <!-- 模态框 -->
+    <div class="modal" id="linkModal">
+        <div class="modal-content">
+            <div class="modal-title" id="modalTitle"></div>
+            <div class="modal-desc" id="modalDesc"></div>
+            <div class="modal-buttons">
+                <button class="modal-btn like" id="modalLike">
+                    <span>👍</span>
+                    <span id="likeCount">0</span>
+                </button>
+                <a class="modal-btn visit" id="modalVisit" target="_blank">访问</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 在这里批量添加你的链接数据，留空即可自行填写
+        const links = [
+            {
+                name: "主站",
+                category: "",
+                desc: "",
+                url: "ws21.qzz.io",
+                like: 0
+            },
+            // 继续添加更多链接...
+        ];
+
+        const linkContainer = document.getElementById("linkContainer");
+        const linkModal = document.getElementById("linkModal");
+        const modalTitle = document.getElementById("modalTitle");
+        const modalDesc = document.getElementById("modalDesc");
+        const likeCount = document.getElementById("likeCount");
+        const modalVisit = document.getElementById("modalVisit");
+
+        // 渲染链接卡片
+        function renderLinks() {
+            linkContainer.innerHTML = "";
+            links.forEach((link, index) => {
+                const card = document.createElement("div");
+                card.className = "link-card";
+                card.innerHTML = `
+                    <div class="link-name">${link.name}</div>
+                    <div class="link-category">${link.category}</div>
+                `;
+                card.addEventListener("click", () => openModal(link));
+                linkContainer.appendChild(card);
+            });
+        }
+
+        // 打开模态框
+        function openModal(link) {
+            modalTitle.textContent = link.name;
+            modalDesc.textContent = link.desc;
+            likeCount.textContent = link.like;
+            modalVisit.href = link.url;
+            linkModal.style.display = "flex";
+        }
+
+        // 点击模态框外部关闭
+        linkModal.addEventListener("click", (e) => {
+            if (e.target === linkModal) {
+                linkModal.style.display = "none";
+            }
+        });
+
+        // 初始渲染
+        renderLinks();
+    </script>
+</body>
+</html>
